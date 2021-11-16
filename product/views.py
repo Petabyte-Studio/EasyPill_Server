@@ -1,14 +1,26 @@
 # Create your views here.
 from django.shortcuts import render
 from rest_framework.response import Response
-from .models import Product
+from rest_framework import viewsets
+from rest_framework import filters
+from .models import Product, Comment
 from rest_framework.views import APIView
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, CommentSerializer
 
 
-class ProductListAPI(APIView):
-    def get(self, request):
-        queryset = Product.objects.all()
-        print(queryset)
-        serializer = ProductSerializer(queryset, many=True)
-        return Response(serializer.data)
+class ProductListAPI(viewsets.ModelViewSet):
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter,)
+    queryset = Product.objects.all()
+    print(queryset)
+    serializer_class = ProductSerializer
+    # def get(self, request):
+    #     queryset = Product.objects.all()
+    #     print(queryset)
+    #     serializer = ProductSerializer(queryset, many=True)
+    #     return Response(serializer.data)
+
+
+class CommentAPI(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
