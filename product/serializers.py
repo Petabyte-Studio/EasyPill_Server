@@ -15,6 +15,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
+    avg_rate = serializers.FloatField(read_only=True, default=0)
 
     class Meta:
         model = Product        # product 모델 사용

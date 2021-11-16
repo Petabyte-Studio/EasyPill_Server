@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from .models import Product, Comment
 from rest_framework.views import APIView
+from django.db.models import Avg, F
 from .serializers import ProductSerializer, CommentSerializer
 
 
@@ -14,6 +15,9 @@ class ProductListAPI(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     print(queryset)
     serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return super().get_queryset().annotate(avg_rate=Avg(F('comments__rate')))
     # def get(self, request):
     #     queryset = Product.objects.all()
     #     print(queryset)
