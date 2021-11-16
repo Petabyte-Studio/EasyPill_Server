@@ -2,12 +2,15 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework import filters
 from .models import Product, Comment
 from rest_framework.views import APIView
 from .serializers import ProductSerializer, CommentSerializer
 
 
 class ProductListAPI(viewsets.ModelViewSet):
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter,)
     queryset = Product.objects.all()
     print(queryset)
     serializer_class = ProductSerializer
