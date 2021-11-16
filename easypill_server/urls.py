@@ -13,6 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+
+# TODO: 여기 라우터로 추후에 변경할 것
+
 from django.contrib import admin
 from django.urls import path, include
 from product.views import ProductListAPI, CommentAPI
@@ -26,3 +30,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls))
 ]
+
+# from django.contrib import admin
+# from django.urls import path
+# from product.views import ProductListAPI, CommentAPI
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('api/product/', ProductListAPI.as_view()),
+#     path('api/comment/', CommentAPI.as_view())
+# ]

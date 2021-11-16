@@ -16,7 +16,9 @@ class Product(models.Model):
 
 
 class Comment(models.Model):
-
+    product = models.ForeignKey(
+        Product, related_name='comments', on_delete=models.CASCADE, default=None)
+    user = models.CharField(default='oo', max_length=20)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
 
