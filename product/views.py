@@ -9,9 +9,14 @@ from django.db.models import Avg, F
 from .serializers import ProductSerializer, CommentSerializer
 
 
+class DynamicSearchFilter(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.GET.getlist('search_fields', [])
+
+
 class ProductListAPI(viewsets.ModelViewSet):
-    search_fields = ['name']
-    filter_backends = (filters.SearchFilter,)
+    # search_fields = ['name']
+    filter_backends = (DynamicSearchFilter, filters.OrderingFilter)
     queryset = Product.objects.all()
     print(queryset)
     serializer_class = ProductSerializer
