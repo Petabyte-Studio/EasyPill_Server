@@ -18,7 +18,6 @@ class ProductListAPI(viewsets.ModelViewSet):
     # search_fields = ['name']
     filter_backends = (DynamicSearchFilter, filters.OrderingFilter)
     queryset = Product.objects.all()
-    print(queryset)
     serializer_class = ProductSerializer
 
     def get_queryset(self):

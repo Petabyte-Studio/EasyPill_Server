@@ -21,6 +21,8 @@ from django.contrib import admin
 from django.urls import path, include
 from product.views import ProductListAPI, CommentAPI
 from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register('product', ProductListAPI, basename='product')  # (게시글)
@@ -29,7 +31,7 @@ router.register('comment', CommentAPI, basename='comment')  # (댓글)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls))
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # from django.contrib import admin
 # from django.urls import path
