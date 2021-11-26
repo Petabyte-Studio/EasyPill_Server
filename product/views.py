@@ -16,12 +16,29 @@ class DynamicSearchFilter(filters.SearchFilter):
 
 class ProductListAPI(viewsets.ModelViewSet):
     # search_fields = ['name']
+    # value = ['company', 'image', 'name', 'price']
+    # value.append('comments')
     filter_backends = (DynamicSearchFilter, filters.OrderingFilter)
     queryset = Product.objects.all()
+
     serializer_class = ProductSerializer
+    serializer_class.Meta.hasComment(value='true')
 
     def get_queryset(self):
+        is_active = self.request.GET.get('comments', None)
+        if is_active is None:
+            print('VISIBLE')
+            self.serializer_class.Meta.hasComment('true')
+            # self.value.append('comments')
+        # elif is_active == 'true':
+        #     # qs = self.filter_active(qs)
+        elif is_active == 'false':
+            self.serializer_class.Meta.hasComment('false')
+            print('INVISIBLE')
+        else:
+            pass
         return super().get_queryset().annotate(avg_rate=Avg(F('comments__rate')))
+
     # def get(self, request):
     #     queryset = Product.objects.all()
     #     print(queryset)
