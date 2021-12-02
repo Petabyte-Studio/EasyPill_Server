@@ -1,12 +1,13 @@
 # Create your views here.
 from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import filters
 from .models import Product, Comment
 from rest_framework.views import APIView
-from django.db.models import Avg, F
-from .serializers import ProductSerializer, CommentSerializer
+from django.db.models import Avg, F, Count
+from .serializers import ProductSerializer, CommentSerializer, ProductDetailSerializer
 
 
 class DynamicSearchFilter(filters.SearchFilter):
@@ -22,28 +23,20 @@ class ProductListAPI(viewsets.ModelViewSet):
     queryset = Product.objects.all()
 
     serializer_class = ProductSerializer
-    serializer_class.Meta.hasComment(value='true')
 
     def get_queryset(self):
-        is_active = self.request.GET.get('comments', None)
-        if is_active is None:
-            print('VISIBLE')
-            self.serializer_class.Meta.hasComment('true')
-            # self.value.append('comments')
-        # elif is_active == 'true':
-        #     # qs = self.filter_active(qs)
-        elif is_active == 'false':
-            self.serializer_class.Meta.hasComment('false')
-            print('INVISIBLE')
-        else:
-            pass
-        return super().get_queryset().annotate(avg_rate=Avg(F('comments__rate')))
+        return super().get_queryset().annotate(avg_rate=Avg(F('comments__rate'))).annotate(comment_count=Count('comments__rate'))
 
-    # def get(self, request):
-    #     queryset = Product.objects.all()
-    #     print(queryset)
-    #     serializer = ProductSerializer(queryset, many=True)
-    #     return Response(serializer.data)
+
+def ProductDetailAPI(request, pk):
+    try:
+        product = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = ProductDetailSerializer(product, context=('request'))
+        return JsonResponse(serializer.data)
 
 
 class CommentAPI(viewsets.ModelViewSet):
