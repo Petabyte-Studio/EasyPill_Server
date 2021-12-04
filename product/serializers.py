@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Comment
+from .models import Product, Comment, User
 
 
 # class ProductSerializer(serializers.ModelSerializer):
@@ -38,3 +38,14 @@ class ProductDetailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    def create(self, validated_data):
+        uid = validated_data.get('uid')
+        name = validated_data.get('name')
+        return User.objects.create(uid=uid, name=name)

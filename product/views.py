@@ -3,11 +3,11 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework import filters
-from .models import Product, Comment
+from rest_framework import filters, status
+from .models import Product, Comment, User
 from rest_framework.views import APIView
 from django.db.models import Avg, F, Count
-from .serializers import ProductSerializer, CommentSerializer, ProductDetailSerializer
+from .serializers import ProductSerializer, CommentSerializer, ProductDetailSerializer, UserSerializer
 
 
 class DynamicSearchFilter(filters.SearchFilter):
@@ -42,3 +42,20 @@ def ProductDetailAPI(request, pk):
 class CommentAPI(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+
+class UserAPI(viewsets.ModelViewSet):
+    search_fields = ['uid']
+    filter_backends = (filters.SearchFilter,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()

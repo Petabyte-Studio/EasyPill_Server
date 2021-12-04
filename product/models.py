@@ -27,3 +27,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+
+
+class User(models.Model):
+    uid = models.CharField(max_length=40)
+    name = models.CharField(max_length=30)
+    image = models.ImageField(default='product/default_image.png')
