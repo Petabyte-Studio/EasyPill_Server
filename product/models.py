@@ -32,4 +32,16 @@ class Comment(models.Model):
 class User(models.Model):
     uid = models.CharField(max_length=40)
     name = models.CharField(max_length=30)
-    image = models.ImageField(default='product/default_image.png')
+    image = models.ImageField(default='product/default_image.png', upload_to="profile")
+
+    def __str__(self):
+        return self.uid
+
+
+class Subscription(models.Model):
+    uid = models.ForeignKey(User, related_name='subscriptions', on_delete=models.CASCADE, default=None)
+    product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
+    start_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    def __str__(self):
+        return self.uid
