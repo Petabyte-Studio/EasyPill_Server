@@ -32,4 +32,4 @@ class Comment(models.Model):
 class User(models.Model):
     uid = models.CharField(max_length=40)
     name = models.CharField(max_length=30)
-    image = models.ImageField(default='product/default_image.png')
+    image = models.ImageField(default='product/default_image.png', upload_to="profile")

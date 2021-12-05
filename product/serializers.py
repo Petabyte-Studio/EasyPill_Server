@@ -41,6 +41,8 @@ class ProductDetailSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
+
     class Meta:
         model = User
         fields = '__all__'
@@ -48,4 +50,5 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         uid = validated_data.get('uid')
         name = validated_data.get('name')
-        return User.objects.create(uid=uid, name=name)
+        image = validated_data.get('image')
+        return User.objects.create(uid=uid, name=name, image=image)
