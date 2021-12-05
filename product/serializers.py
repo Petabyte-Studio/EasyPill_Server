@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Comment, User
+from .models import Product, Comment, User, Subscription
 
 
 # class ProductSerializer(serializers.ModelSerializer):
@@ -40,8 +40,15 @@ class ProductDetailSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True)
+    subscriptions = SubscriptionSerializer(many=True, read_only=True, required=False)
 
     class Meta:
         model = User

@@ -4,10 +4,10 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import filters, status
-from .models import Product, Comment, User
+from .models import Product, Comment, User, Subscription
 from rest_framework.views import APIView
 from django.db.models import Avg, F, Count
-from .serializers import ProductSerializer, CommentSerializer, ProductDetailSerializer, UserSerializer
+from .serializers import ProductSerializer, CommentSerializer, ProductDetailSerializer, UserSerializer, SubscriptionSerializer
 
 
 class DynamicSearchFilter(filters.SearchFilter):
@@ -59,3 +59,8 @@ class UserAPI(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+
+class SubscriptionAPI(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
