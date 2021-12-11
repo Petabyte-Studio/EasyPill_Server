@@ -41,6 +41,8 @@ class ProductDetailSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
+    product = ProductDetailSerializer(many=False, read_only=True, required=False)
+
     class Meta:
         model = Subscription
         fields = '__all__'
