@@ -11,6 +11,7 @@
 | ----------- | ------ | ------------------ |
 | id          | Number | 제품의 Primary Key |
 | comments    | Array  | 제품에 달린 댓글   |
+| comment_count | Number | 제품의 달린 댓글 개수 |
 | image       | String | 제품의 대표 사진   |
 | avg_rate    | Number | 제품의 별점        |
 | name        | String | 제품의 이름        |
@@ -20,6 +21,7 @@
 | description | String | 제품의 상세설명    |
 | created_at  | Date   | 데이터 추가 날짜   |
 | updated_at  | Date   | 데이터 변경 날짜   |
+
 
 ## Comment Response Message
 
@@ -32,6 +34,23 @@ Comment는 Product와 1:N Foriegn Key 관계를 가집니다.
 |rate|Number|별점|
 |created_at|Date|댓글 추가 날짜|
 |product|Number|댓글을 작성한 제품|
+
+## User Response Message
+
+|Name|Type|Description|
+|-|-|-|
+|uid|String|유저 ID|
+|name|String|유저 닉네임|
+|image|Image|유저 프로필 이미지|
+
+## Subscription Response Message
+
+|Name|Type|Description|
+|-|-|-|
+|uid|String|구독중인 유저의 ID|
+|product|Array|구독중인 제품의 정보|
+|start_at|Date|구독 시작 날짜|
+
 
 # API 필터링
 
